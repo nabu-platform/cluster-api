@@ -1,6 +1,6 @@
 package be.nabu.libs.cluster.api;
 
-public interface ClusterAtomicLong {
+public interface ClusterAtomicLong extends Destroyable {
 	public long addAndGet(long delta);
 	public boolean compareAndSet(long expect, long update);
 	public long decrementAndGet();

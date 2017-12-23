@@ -8,7 +8,14 @@ import be.nabu.libs.cluster.api.ClusterCountDownLatch;
 public class LocalCountDownLatch implements ClusterCountDownLatch {
 
 	private CountDownLatch latch;
+	private LocalInstance localInstance;
+	private String name;
 	
+	public LocalCountDownLatch(String name, LocalInstance localInstance) {
+		this.name = name;
+		this.localInstance = localInstance;
+	}
+
 	@Override
 	public void await() throws InterruptedException {
 		getLatch().await();
@@ -46,5 +53,10 @@ public class LocalCountDownLatch implements ClusterCountDownLatch {
 		else {
 			return false;
 		}
+	}
+
+	@Override
+	public void destroy() {
+		localInstance.destroy(name, localInstance.countDownLatches);
 	}
 }

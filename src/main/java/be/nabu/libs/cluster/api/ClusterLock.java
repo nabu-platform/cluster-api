@@ -2,7 +2,7 @@ package be.nabu.libs.cluster.api;
 
 import java.util.concurrent.TimeUnit;
 
-public interface ClusterLock {
+public interface ClusterLock extends Destroyable {
 	// lock indefinitely until explicitly unlocked
 	// note that this may wait indefinitely as well if someone else has the lock
 	public void lock();

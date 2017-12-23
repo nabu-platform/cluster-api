@@ -7,7 +7,14 @@ import be.nabu.libs.cluster.api.ClusterAtomicLong;
 public class LocalAtomicLong implements ClusterAtomicLong {
 
 	private AtomicLong atomic = new AtomicLong();
+	private String name;
+	private LocalInstance localInstance;
 	
+	public LocalAtomicLong(String name, LocalInstance localInstance) {
+		this.name = name;
+		this.localInstance = localInstance;
+	}
+
 	@Override
 	public long addAndGet(long delta) {
 		return atomic.addAndGet(delta);
@@ -66,6 +73,11 @@ public class LocalAtomicLong implements ClusterAtomicLong {
 	@Override
 	public String toString() {
 		return atomic.toString();
+	}
+
+	@Override
+	public void destroy() {
+		localInstance.destroy(name, localInstance.atomicLongs);
 	}
 
 }
