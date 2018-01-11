@@ -2,6 +2,8 @@ package be.nabu.libs.cluster.local;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import be.nabu.libs.cluster.api.ClusterMessageListener;
 import be.nabu.libs.cluster.api.ClusterSubscription;
@@ -12,34 +14,26 @@ public class LocalTopic<T> implements ClusterTopic<T> {
 	private List<ClusterMessageListener<T>> listeners = new ArrayList<ClusterMessageListener<T>>();
 	private String name;
 	private LocalInstance localInstance;
+	private ExecutorService pool;
 	
 	public LocalTopic(String name, LocalInstance localInstance) {
 		this.name = name;
 		this.localInstance = localInstance;
+		this.pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 	}
 
 	@Override
-	public void publish(T message) {
+	public void publish(final T message) {
 		List<ClusterMessageListener<T>> listeners;
 		synchronized (this.listeners) {
 			listeners = new ArrayList<ClusterMessageListener<T>>(this.listeners);
 		}
-		RuntimeException exception = null;
-		for (ClusterMessageListener<T> listener : listeners) {
-			try {
-				listener.onMessage(message);
-			}
-			catch (RuntimeException e) {
-				if (exception == null) {
-					exception = e;
+		for (final ClusterMessageListener<T> listener : listeners) {
+			pool.submit(new Runnable() {
+				public void run() {
+					listener.onMessage(message);
 				}
-				else {
-					exception.addSuppressed(e);
-				}
-			}
-		}
-		if (exception != null) {
-			throw exception;
+			});
 		}
 	}
 
