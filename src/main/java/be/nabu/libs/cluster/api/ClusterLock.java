@@ -18,4 +18,6 @@ public interface ClusterLock extends Destroyable {
 	public boolean tryLock(long timeout, TimeUnit timeoutUnit, long leaseTime, TimeUnit leaseTimeUnit) throws InterruptedException;
 	// whether or not the lock is currently locked
 	public boolean isLocked();
+	// whether or not the lock is currently locked by the current thread
+	public boolean isLockedByCurrentThread();
 }

@@ -14,6 +14,7 @@ public class LocalLock implements ClusterLock {
 	public LocalLock(String name, LocalInstance localInstance) {
 		this.name = name;
 		this.localInstance = localInstance;
+		this.lock = new ReentrantLock();
 	}
 
 	@Override
@@ -59,5 +60,10 @@ public class LocalLock implements ClusterLock {
 	@Override
 	public void destroy() {
 		localInstance.destroy(name, localInstance.locks);
+	}
+
+	@Override
+	public boolean isLockedByCurrentThread() {
+		return lock.isHeldByCurrentThread();
 	}
 }

@@ -4,7 +4,7 @@
 	<groupId>be.nabu.libs.cluster</groupId>
 	<artifactId>cluster-api</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<version>${be.nabu.libs.cluster-cluster-api-version}</version>
 	<name>cluster-api</name>
 
 	<parent>

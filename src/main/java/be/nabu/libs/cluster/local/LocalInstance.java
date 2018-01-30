@@ -28,6 +28,12 @@ public class LocalInstance implements ClusterInstance {
 	Map<String, ClusterList<?>> lists = new HashMap<String, ClusterList<?>>();
 	Map<String, ClusterTopic<?>> topics = new HashMap<String, ClusterTopic<?>>();
 	
+	private static LocalInstance instance = new LocalInstance();
+	
+	public static LocalInstance getInstance() {
+		return instance;
+	}
+	
 	@Override
 	public ClusterLock lock(final String name) {
 		return get(name, locks, new Callable<ClusterLock>() {
