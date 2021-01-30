@@ -18,6 +18,8 @@ import be.nabu.libs.cluster.api.ClusterList;
 import be.nabu.libs.cluster.api.ClusterLock;
 import be.nabu.libs.cluster.api.ClusterMap;
 import be.nabu.libs.cluster.api.ClusterMember;
+import be.nabu.libs.cluster.api.ClusterMembershipListener;
+import be.nabu.libs.cluster.api.ClusterMembershipSubscription;
 import be.nabu.libs.cluster.api.ClusterSet;
 import be.nabu.libs.cluster.api.ClusterTopic;
 
@@ -236,5 +238,16 @@ public class LocalInstance implements ClusterInstance {
 
 	public void setGroup(String group) {
 		this.group = group;
+	}
+
+	@Override
+	public ClusterMembershipSubscription addMembershipListener(ClusterMembershipListener listener) {
+		// no members can be added or removed from the local instance
+		return new ClusterMembershipSubscription() {
+			@Override
+			public void unsubscribe() {
+				// do nothing
+			}
+		};
 	}
 }

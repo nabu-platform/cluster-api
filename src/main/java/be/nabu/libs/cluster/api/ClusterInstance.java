@@ -13,4 +13,5 @@ public interface ClusterInstance {
 	public <T> ClusterBlockingQueue<T> queue(String name);
 	public <T> ClusterTopic<T> topic(String name);
 	public List<ClusterMember> members();
+	public ClusterMembershipSubscription addMembershipListener(ClusterMembershipListener listener);
 }
