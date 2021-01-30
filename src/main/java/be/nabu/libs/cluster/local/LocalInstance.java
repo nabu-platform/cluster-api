@@ -1,7 +1,11 @@
 package be.nabu.libs.cluster.local;
 
 import java.lang.ref.WeakReference;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -13,6 +17,7 @@ import be.nabu.libs.cluster.api.ClusterInstance;
 import be.nabu.libs.cluster.api.ClusterList;
 import be.nabu.libs.cluster.api.ClusterLock;
 import be.nabu.libs.cluster.api.ClusterMap;
+import be.nabu.libs.cluster.api.ClusterMember;
 import be.nabu.libs.cluster.api.ClusterSet;
 import be.nabu.libs.cluster.api.ClusterTopic;
 
@@ -27,6 +32,9 @@ public class LocalInstance implements ClusterInstance {
 	Map<String, ClusterSet<?>> sets = new HashMap<String, ClusterSet<?>>();
 	Map<String, ClusterList<?>> lists = new HashMap<String, ClusterList<?>>();
 	Map<String, ClusterTopic<?>> topics = new HashMap<String, ClusterTopic<?>>();
+	List<ClusterMember> members;
+	
+	private String name = "localhost", group = "localhost";
 	
 	private static LocalInstance instance = new LocalInstance();
 	
@@ -181,5 +189,52 @@ public class LocalInstance implements ClusterInstance {
 				return new LocalTopic(name, LocalInstance.this);
 			}
 		});
+	}
+
+	@Override
+	public List<ClusterMember> members() {
+		if (members == null) {
+			synchronized(this) {
+				if (members == null) {
+					members = new ArrayList<ClusterMember>();
+					members.add(new ClusterMember() {
+						@Override
+						public String getName() {
+							return name;
+						}
+						@Override
+						public String getGroup() {
+							return group;
+						}
+						@Override
+						public InetAddress getAddress() {
+							try {
+								return InetAddress.getLocalHost();
+							}
+							catch (UnknownHostException e) {
+								throw new RuntimeException(e);
+							}
+						}
+					});
+				}
+			}
+		}
+		return members;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
 	}
 }

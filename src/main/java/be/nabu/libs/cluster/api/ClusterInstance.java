@@ -1,5 +1,7 @@
 package be.nabu.libs.cluster.api;
 
+import java.util.List;
+
 public interface ClusterInstance {
 	public ClusterLock lock(String name);
 	public ClusterAtomicLong atomicLong(String name);
@@ -10,4 +12,5 @@ public interface ClusterInstance {
 	public <T> ClusterList<T> list(String name);
 	public <T> ClusterBlockingQueue<T> queue(String name);
 	public <T> ClusterTopic<T> topic(String name);
+	public List<ClusterMember> members();
 }
