@@ -22,10 +22,10 @@ public class LocalLock implements ClusterLock {
 		lock.lock();
 	}
 
-	@Override
-	public void lock(long leaseTime, TimeUnit leaseTimeUnit) {
-		this.lock();
-	}
+//	@Override
+//	public void lock(long leaseTime, TimeUnit leaseTimeUnit) {
+//		this.lock();
+//	}
 
 	@Override
 	public void unlock() {
@@ -37,10 +37,10 @@ public class LocalLock implements ClusterLock {
 		return lock.tryLock(timeout, timeoutUnit);
 	}
 
-	@Override
-	public boolean tryLock(long timeout, TimeUnit timeoutUnit, long leaseTime, TimeUnit leaseTimeUnit) throws InterruptedException {
-		return this.tryLock(timeout, timeoutUnit);
-	}
+//	@Override
+//	public boolean tryLock(long timeout, TimeUnit timeoutUnit, long leaseTime, TimeUnit leaseTimeUnit) throws InterruptedException {
+//		return this.tryLock(timeout, timeoutUnit);
+//	}
 
 	@Override
 	public boolean isLocked() {
