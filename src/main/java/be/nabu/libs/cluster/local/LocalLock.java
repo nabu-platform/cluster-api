@@ -64,6 +64,6 @@ public class LocalLock implements ClusterLock {
 
 	@Override
 	public boolean isLockedByCurrentThread() {
-		return lock.isHeldByCurrentThread();
+		return lock.isLocked() && lock.isHeldByCurrentThread();
 	}
 }
